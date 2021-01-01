@@ -21,19 +21,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Main extends JavaPlugin implements Listener {
-    
+
     private FileManager fileManager = FileManager.getInstance();
     private CrazyEnvoy envoy = CrazyEnvoy.getInstance();
-    
+
     @Override
     public void onEnable() {
-        String homeFolder = Version.isNewer(Version.v1_12_R1) ? "/Tiers1.13-Up" : "/Tiers1.12.2-Down";
+        String homeFolder = "/Tiers1.12.2-Down";
         fileManager.logInfo(true)
-        .registerCustomFilesFolder("/Tiers")
-        .registerDefaultGenerateFiles("Basic.yml", "/Tiers", homeFolder)
-        .registerDefaultGenerateFiles("Lucky.yml", "/Tiers", homeFolder)
-        .registerDefaultGenerateFiles("Titan.yml", "/Tiers", homeFolder)
-        .setup(this);
+                .registerCustomFilesFolder("/Tiers")
+                .registerDefaultGenerateFiles("Common.yml", "/Tiers", homeFolder)
+                .registerDefaultGenerateFiles("Legendary.yml", "/Tiers", homeFolder)
+                .registerDefaultGenerateFiles("Rare.yml", "/Tiers", homeFolder)
+                .registerDefaultGenerateFiles("Ultimate.yml", "/Tiers", homeFolder)
+                .registerDefaultGenerateFiles("Uncommon.yml", "/Tiers", homeFolder)
+                .setup(this);
         envoy.load();
         Methods.hasUpdate();
         new Metrics(this);
@@ -57,7 +59,7 @@ public class Main extends JavaPlugin implements Listener {
         getCommand("skydrop").setExecutor(new EnvoyCommand());
         getCommand("skydrop").setTabCompleter(new EnvoyTab());
     }
-    
+
     @Override
     public void onDisable() {
         for (Player player : Bukkit.getOnlinePlayers()) {
@@ -77,7 +79,7 @@ public class Main extends JavaPlugin implements Listener {
         }
         envoy.unload();
     }
-    
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         final Player player = e.getPlayer();
@@ -93,5 +95,5 @@ public class Main extends JavaPlugin implements Listener {
             }
         }.runTaskLaterAsynchronously(this, 20);
     }
-    
+
 }

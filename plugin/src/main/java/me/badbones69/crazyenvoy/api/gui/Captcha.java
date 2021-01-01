@@ -16,7 +16,7 @@ import java.util.Random;
 
 public class Captcha {
 
-    private List<Material> materialList = new ArrayList<>();
+    private List<Material> materialList = getMaterials();
 
     public Inventory createCaptchaInventory() {
 
@@ -48,14 +48,19 @@ public class Captcha {
         return inv;
     }
 
-    private void getMaterials() {
+    private ArrayList<Material> getMaterials() {
+
+        ArrayList<Material> materials = new ArrayList<>();
+
         FileConfiguration config = FileManager.Files.CONFIG.getFile();
 
         for (String line : config.getStringList("captchaBlocks")) {
-            Material m = Material.getMaterial(line);
-            if (m != null)
-                materialList.add(m);
+            Material material = Material.getMaterial(line);
+            if (material != null)
+                materials.add(material);
         }
+
+        return materials;
 
     }
 }
