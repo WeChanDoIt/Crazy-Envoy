@@ -13,8 +13,9 @@ import me.badbones69.crazyenvoy.api.objects.*;
 import me.badbones69.crazyenvoy.controllers.EditControl;
 import me.badbones69.crazyenvoy.controllers.EnvoyControl;
 import me.badbones69.crazyenvoy.controllers.FireworkDamageAPI;
-import me.badbones69.crazyenvoy.multisupport.*;
-import me.badbones69.crazyenvoy.multisupport.holograms.HologramsSupport;
+import me.badbones69.crazyenvoy.multisupport.Support;
+import me.badbones69.crazyenvoy.multisupport.WorldGuardVersion;
+import me.badbones69.crazyenvoy.multisupport.WorldGuard_v6;
 import me.badbones69.crazyenvoy.multisupport.holograms.HolographicSupport;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -32,7 +33,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.*;
 
 public class CrazyEnvoy {
-    
+
     private static CrazyEnvoy instance = new CrazyEnvoy();
     private FileManager fileManager = FileManager.getInstance();
     private boolean isLogging = fileManager.isLogging();
@@ -59,15 +60,16 @@ public class CrazyEnvoy {
     private List<Tier> cechedChances = new ArrayList<>();
     private Plugin plugin;
     private Random random = new Random();
-    
+
     /**
      * Get the instance of the envoy plugin.
+     *
      * @return The instance of the envoy plugin.
      */
     public static CrazyEnvoy getInstance() {
         return instance;
     }
-    
+
     /**
      * Run this when you need to load the new locations.
      */
@@ -79,7 +81,7 @@ public class CrazyEnvoy {
         blacklistedBlocks.clear();
         cechedChances.clear();
         envoySettings.loadSettings();
-        plugin = Bukkit.getPluginManager().getPlugin("CrazyEnvoy");
+        plugin = Bukkit.getPluginManager().getPlugin("RetronixSkydrops");
         FileConfiguration data = Files.DATA.getFile();
         envoyTimeLeft = Calendar.getInstance();
         List<String> failedLocations = new ArrayList<>();
@@ -91,7 +93,8 @@ public class CrazyEnvoy {
                 failedLocations.add(location);
             }
         }
-        if (fileManager.isLogging() && !failedLocations.isEmpty()) System.out.println("[CrazyEnvoy] Failed to load " + failedLocations.size() + " locations and will reattempt in 10s.");
+        if (fileManager.isLogging() && !failedLocations.isEmpty())
+            System.out.println("[CrazyEnvoy] Failed to load " + failedLocations.size() + " locations and will reattempt in 10s.");
         if (Calendar.getInstance().after(getNextEnvoy())) {
             setEnvoyActive(false);
         }
@@ -176,87 +179,58 @@ public class CrazyEnvoy {
             tiers.add(tier);
             cleanLocations();
             //Loading the blacklisted blocks.
-            if (Version.isNewer(Version.v1_12_R1)) {
-                blacklistedBlocks.add(Material.WATER);
-                blacklistedBlocks.add(Material.LILY_PAD);
-                blacklistedBlocks.add(Material.LAVA);
-                blacklistedBlocks.add(Material.CHORUS_PLANT);
-                blacklistedBlocks.add(Material.KELP_PLANT);
-                blacklistedBlocks.add(Material.TALL_GRASS);
-                blacklistedBlocks.add(Material.CHORUS_FLOWER);
-                blacklistedBlocks.add(Material.SUNFLOWER);
-                blacklistedBlocks.add(Material.IRON_BARS);
-                blacklistedBlocks.add(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
-                blacklistedBlocks.add(Material.IRON_TRAPDOOR);
-                blacklistedBlocks.add(Material.OAK_TRAPDOOR);
-                blacklistedBlocks.add(Material.OAK_FENCE);
-                blacklistedBlocks.add(Material.OAK_FENCE_GATE);
-                blacklistedBlocks.add(Material.ACACIA_FENCE);
-                blacklistedBlocks.add(Material.BIRCH_FENCE);
-                blacklistedBlocks.add(Material.DARK_OAK_FENCE);
-                blacklistedBlocks.add(Material.JUNGLE_FENCE);
-                blacklistedBlocks.add(Material.NETHER_BRICK_FENCE);
-                blacklistedBlocks.add(Material.SPRUCE_FENCE);
-                blacklistedBlocks.add(Material.ACACIA_FENCE_GATE);
-                blacklistedBlocks.add(Material.BIRCH_FENCE_GATE);
-                blacklistedBlocks.add(Material.DARK_OAK_FENCE_GATE);
-                blacklistedBlocks.add(Material.JUNGLE_FENCE_GATE);
-                blacklistedBlocks.add(Material.SPRUCE_FENCE_GATE);
-                blacklistedBlocks.add(Material.GLASS_PANE);
-                blacklistedBlocks.add(Material.STONE_SLAB);
-            } else {
-                blacklistedBlocks.add(Material.WATER);
-                blacklistedBlocks.add(Material.matchMaterial("STATIONARY_WATER"));
-                blacklistedBlocks.add(Material.matchMaterial("WATER_LILY"));
-                blacklistedBlocks.add(Material.LAVA);
-                blacklistedBlocks.add(Material.matchMaterial("STATIONARY_LAVA"));
-                blacklistedBlocks.add(Material.matchMaterial("CROPS"));
-                blacklistedBlocks.add(Material.matchMaterial("LONG_GRASS"));
-                blacklistedBlocks.add(Material.matchMaterial("YELLOW_FLOWER"));
-                blacklistedBlocks.add(Material.matchMaterial("IRON_FENCE"));
-                blacklistedBlocks.add(Material.matchMaterial("IRON_PLATE"));
-                blacklistedBlocks.add(Material.IRON_TRAPDOOR);
-                blacklistedBlocks.add(Material.matchMaterial("TRAP_DOOR"));
-                blacklistedBlocks.add(Material.matchMaterial("FENCE"));
-                blacklistedBlocks.add(Material.matchMaterial("FENCE_GATE"));
-                blacklistedBlocks.add(Material.ACACIA_FENCE);
-                blacklistedBlocks.add(Material.BIRCH_FENCE);
-                blacklistedBlocks.add(Material.DARK_OAK_FENCE);
-                blacklistedBlocks.add(Material.JUNGLE_FENCE);
-                blacklistedBlocks.add(Material.matchMaterial("NETHER_FENCE"));
-                blacklistedBlocks.add(Material.SPRUCE_FENCE);
-                blacklistedBlocks.add(Material.ACACIA_FENCE_GATE);
-                blacklistedBlocks.add(Material.BIRCH_FENCE_GATE);
-                blacklistedBlocks.add(Material.DARK_OAK_FENCE_GATE);
-                blacklistedBlocks.add(Material.JUNGLE_FENCE_GATE);
-                blacklistedBlocks.add(Material.SPRUCE_FENCE_GATE);
-                blacklistedBlocks.add(Material.matchMaterial("STAINED_GLASS_PANE"));
-                blacklistedBlocks.add(Material.matchMaterial("STONE_SLAB2"));
-            }
+
+            blacklistedBlocks.add(Material.WATER);
+            blacklistedBlocks.add(Material.matchMaterial("STATIONARY_WATER"));
+            blacklistedBlocks.add(Material.matchMaterial("WATER_LILY"));
+            blacklistedBlocks.add(Material.LAVA);
+            blacklistedBlocks.add(Material.matchMaterial("STATIONARY_LAVA"));
+            blacklistedBlocks.add(Material.matchMaterial("CROPS"));
+            blacklistedBlocks.add(Material.matchMaterial("LONG_GRASS"));
+            blacklistedBlocks.add(Material.matchMaterial("YELLOW_FLOWER"));
+            blacklistedBlocks.add(Material.matchMaterial("IRON_FENCE"));
+            blacklistedBlocks.add(Material.matchMaterial("IRON_PLATE"));
+            blacklistedBlocks.add(Material.IRON_TRAPDOOR);
+            blacklistedBlocks.add(Material.matchMaterial("TRAP_DOOR"));
+            blacklistedBlocks.add(Material.matchMaterial("FENCE"));
+            blacklistedBlocks.add(Material.matchMaterial("FENCE_GATE"));
+            blacklistedBlocks.add(Material.ACACIA_FENCE);
+            blacklistedBlocks.add(Material.BIRCH_FENCE);
+            blacklistedBlocks.add(Material.DARK_OAK_FENCE);
+            blacklistedBlocks.add(Material.JUNGLE_FENCE);
+            blacklistedBlocks.add(Material.matchMaterial("NETHER_FENCE"));
+            blacklistedBlocks.add(Material.SPRUCE_FENCE);
+            blacklistedBlocks.add(Material.ACACIA_FENCE_GATE);
+            blacklistedBlocks.add(Material.BIRCH_FENCE_GATE);
+            blacklistedBlocks.add(Material.DARK_OAK_FENCE_GATE);
+            blacklistedBlocks.add(Material.JUNGLE_FENCE_GATE);
+            blacklistedBlocks.add(Material.SPRUCE_FENCE_GATE);
+            blacklistedBlocks.add(Material.matchMaterial("STAINED_GLASS_PANE"));
+            blacklistedBlocks.add(Material.matchMaterial("STONE_SLAB2"));
+
         }
         if (Support.WORLD_GUARD.isPluginLoaded() && Support.WORLD_EDIT.isPluginLoaded()) {
-            worldGuardVersion = Version.isNewer(Version.v1_12_R1) ? new WorldGuard_v7() : new WorldGuard_v6();
+            worldGuardVersion = new WorldGuard_v6();
         }
         if (Support.HOLOGRAPHIC_DISPLAYS.isPluginLoaded()) {
             hologramController = new HolographicSupport();
-        } else if (Support.HOLOGRAMS.isPluginLoaded()) {
-            hologramController = new HologramsSupport();
         }
         if (hologramController != null) {
-            if (fileManager.isLogging()) System.out.println("[CrazyEnvoy] Loaded " + hologramController.getPluginName() + " hologram hook.");
+            if (fileManager.isLogging())
+                System.out.println("[CrazyEnvoy] Loaded " + hologramController.getPluginName() + " hologram hook.");
         } else {
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (Support.HOLOGRAPHIC_DISPLAYS.isPluginLoaded()) {
                         hologramController = new HolographicSupport();
-                    } else if (Support.HOLOGRAMS.isPluginLoaded()) {
-                        hologramController = new HologramsSupport();
                     }
                     if (hologramController != null) {
-                        if (fileManager.isLogging()) System.out.println("[CrazyEnvoy] Loaded " + hologramController.getPluginName() + " hologram hook.");
+                        if (fileManager.isLogging())
+                            System.out.println("[CrazyEnvoy] Loaded " + hologramController.getPluginName() + " hologram hook.");
                     } else {
-                        if (fileManager.isLogging()) System.out.println("[CrazyEnvoy] No supported hologram plugin was found.");
+                        if (fileManager.isLogging())
+                            System.out.println("[CrazyEnvoy] No supported hologram plugin was found.");
                     }
                 }
             }.runTaskLater(plugin, 200);
@@ -265,7 +239,8 @@ public class CrazyEnvoy {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (fileManager.isLogging()) System.out.println("[CrazyEnvoy] Attempting to fix " + failedLocations.size() + " locations that failed.");
+                    if (fileManager.isLogging())
+                        System.out.println("[CrazyEnvoy] Attempting to fix " + failedLocations.size() + " locations that failed.");
                     int failed = 0;
                     int fixed = 0;
                     for (String location : failedLocations) {
@@ -277,14 +252,17 @@ public class CrazyEnvoy {
                             failed++;
                         }
                     }
-                    if (fileManager.isLogging() && fixed > 0) System.out.println("[CrazyEnvoy] Was able to fix " + fixed + " locations that failed.");
-                    if (fileManager.isLogging() && failed > 0) System.out.println("[CrazyEnvoy] Failed to fix " + failed + " locations and will not reattempt.");
+                    if (fileManager.isLogging() && fixed > 0)
+                        System.out.println("[CrazyEnvoy] Was able to fix " + fixed + " locations that failed.");
+                    if (fileManager.isLogging() && failed > 0)
+                        System.out.println("[CrazyEnvoy] Failed to fix " + failed + " locations and will not reattempt.");
                 }
             }.runTaskLater(plugin, 200);
         }
         Flare.load();
+        LockPick.load();
     }
-    
+
     /**
      * Run this when you need to save the locations.
      */
@@ -295,7 +273,7 @@ public class CrazyEnvoy {
         spawnLocations.clear();
         EnvoyControl.clearCooldowns();
     }
-    
+
     /**
      * Used when the plugin starts to control the count down and when the event starts
      */
@@ -351,24 +329,22 @@ public class CrazyEnvoy {
             }
         }.runTaskTimer(plugin, 20, 20);
     }
-    
+
     /**
-     *
      * @param block The location you want the tier from.
      * @return The tier that location is.
      */
     public Tier getTier(Block block) {
         return activeEnvoys.get(block);
     }
-    
+
     /**
-     *
      * @return True if the envoy event is currently happening and false if not.
      */
     public boolean isEnvoyActive() {
         return envoyActive;
     }
-    
+
     /**
      * Despawns all of the active crates.
      */
@@ -379,36 +355,34 @@ public class CrazyEnvoy {
             block.setType(Material.AIR);
             stopSignalFlare(block.getLocation());
         }
-        fallingBlocks.keySet().forEach(Entity :: remove);
+        activeEnvoys = new HashMap<>();
+        fallingBlocks.keySet().forEach(Entity::remove);
         if (hasHologramPlugin()) {
             hologramController.removeAllHolograms();
         }
         fallingBlocks.clear();
-        activeEnvoys.clear();
     }
-    
+
     public WorldGuardVersion getWorldGuardSupport() {
         return worldGuardVersion;
     }
-    
+
     public HologramController getHologramController() {
         return hologramController;
     }
-    
+
     public boolean hasHologramPlugin() {
         return hologramController != null;
     }
-    
+
     /**
-     *
      * @return All the location the chests will spawn.
      */
     public List<Block> getSpawnLocations() {
         return spawnLocations;
     }
-    
+
     /**
-     *
      * @param location The location that you want to check.
      */
     public boolean isLocation(Location location) {
@@ -419,7 +393,7 @@ public class CrazyEnvoy {
         }
         return false;
     }
-    
+
     public void saveSpawnLocations() {
         ArrayList<String> locations = new ArrayList<>();
         for (Block block : spawnLocations) {
@@ -431,51 +405,45 @@ public class CrazyEnvoy {
         Files.DATA.getFile().set("Locations.Spawns", locations);
         Files.DATA.saveFile();
     }
-    
+
     /**
-     *
      * @return All the active envoys that are active.
      */
     public Set<Block> getActiveEnvoys() {
         return activeEnvoys.keySet();
     }
-    
+
     /**
-     *
      * @param block The location your are checking.
      * @return Turn if it is and false if not.
      */
     public boolean isActiveEnvoy(Block block) {
         return activeEnvoys.containsKey(block);
     }
-    
+
     /**
-     *
      * @param block The location you wish to add.
      */
     public void addActiveEnvoy(Block block, Tier tier) {
         activeEnvoys.put(block, tier);
     }
-    
+
     /**
-     *
      * @param block The location you wish to remove.
      */
     public void removeActiveEnvoy(Block block) {
         activeEnvoys.remove(block);
     }
-    
+
     /**
-     *
      * @param block The location you want to add.
      */
     public void addLocation(Block block) {
         spawnLocations.add(block);
         saveSpawnLocations();
     }
-    
+
     /**
-     *
      * @param block The location you want to remove.
      */
     public void removeLocation(Block block) {
@@ -484,25 +452,22 @@ public class CrazyEnvoy {
             saveSpawnLocations();
         }
     }
-    
+
     /**
-     *
      * @return The next envoy time as a calendar.
      */
     public Calendar getNextEnvoy() {
         return nextEnvoy;
     }
-    
+
     /**
-     *
      * @param cal A calendar that has the next time the envoy will happen.
      */
     public void setNextEnvoy(Calendar cal) {
         nextEnvoy = cal;
     }
-    
+
     /**
-     *
      * @return The time till the next envoy.
      */
     public String getNextEnvoyTime() {
@@ -528,23 +493,21 @@ public class CrazyEnvoy {
         }
         return message;
     }
-    
+
     /**
-     *
      * @return All falling blocks are are currently going.
      */
     public Map<Entity, Block> getFallingBlocks() {
         return fallingBlocks;
     }
-    
+
     /**
-     *
      * @param entity Remove a falling block from the list.
      */
     public void removeFallingBlock(Entity entity) {
         fallingBlocks.remove(entity);
     }
-    
+
     /**
      * Call when you want to set the new warning.
      */
@@ -552,25 +515,22 @@ public class CrazyEnvoy {
         warnings.clear();
         envoySettings.getEnvoyWarnings().forEach(time -> addWarning(makeWarning(time)));
     }
-    
+
     /**
-     *
      * @param cal When adding a new warning.
      */
     public void addWarning(Calendar cal) {
         warnings.add(cal);
     }
-    
+
     /**
-     *
      * @return All the current warnings.
      */
     public List<Calendar> getWarnings() {
         return warnings;
     }
-    
+
     /**
-     *
      * @param time The new time for the warning.
      * @return The new time as a calendar
      */
@@ -590,9 +550,8 @@ public class CrazyEnvoy {
         }
         return cal;
     }
-    
+
     /**
-     *
      * @return The time left in the current envoy event.
      */
     public String getEnvoyRunTimeLeft() {
@@ -618,7 +577,7 @@ public class CrazyEnvoy {
         }
         return message;
     }
-    
+
     /**
      * Call when the run time needs canceled.
      */
@@ -628,7 +587,7 @@ public class CrazyEnvoy {
         } catch (Exception e) {
         }
     }
-    
+
     /**
      * Call when the cool down time needs canceled.
      */
@@ -638,7 +597,12 @@ public class CrazyEnvoy {
         } catch (Exception e) {
         }
     }
-    
+
+    public int getMaxSpawns()
+    {
+        return envoySettings.getMaxCrates();
+    }
+
     public List<Block> generateSpawnLocations() {
         List<Block> dropLocations = new ArrayList<>();
         int maxSpawns;
@@ -669,9 +633,9 @@ public class CrazyEnvoy {
                     continue;
                 }
                 if (location.getBlockY() <= 0 ||
-                minimumRadiusBlocks.contains(location.getBlock()) || minimumRadiusBlocks.contains(location.clone().add(0, 1, 0).getBlock()) ||
-                dropLocations.contains(location.getBlock()) || dropLocations.contains(location.clone().add(0, 1, 0).getBlock()) ||
-                blacklistedBlocks.contains(location.getBlock().getType())) {
+                        minimumRadiusBlocks.contains(location.getBlock()) || minimumRadiusBlocks.contains(location.clone().add(0, 1, 0).getBlock()) ||
+                        dropLocations.contains(location.getBlock()) || dropLocations.contains(location.clone().add(0, 1, 0).getBlock()) ||
+                        blacklistedBlocks.contains(location.getBlock().getType())) {
                     continue;
                 }
                 Block block = location.getBlock();
@@ -700,9 +664,10 @@ public class CrazyEnvoy {
         }
         return dropLocations;
     }
-    
+
     /**
      * Starts the envoy event.
+     *
      * @return true if the event started successfully and false if it had an issue.
      */
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
@@ -759,11 +724,11 @@ public class CrazyEnvoy {
                     if (!block.getChunk().isLoaded()) {
                         block.getChunk().load();
                     }
+                    addActiveEnvoy(block, tier);
                     block.setType(tier.getPlacedBlockMaterial());
                     if (tier.isHoloEnabled() && hasHologramPlugin()) {
                         hologramController.createHologram(block, tier);
                     }
-                    addActiveEnvoy(block, tier);
                     addSpawnedLocation(block);
                     if (tier.getSignalFlareToggle()) {
                         startSignalFlare(block.getLocation(), tier);
@@ -793,7 +758,7 @@ public class CrazyEnvoy {
         envoyTimeLeft = getEnvoyRunTimeCalendar();
         return true;
     }
-    
+
     /**
      * Ends the envoy event.
      */
@@ -801,23 +766,29 @@ public class CrazyEnvoy {
         deSpawnCrates();
         setEnvoyActive(false);
         cancelEnvoyRunTime();
+        for (Block block : EnvoyControl.captchaMap.keySet()) {
+            EnvoyControl.captchaMap.get(block).closeInventory();
+        }
+        EnvoyControl.captchaMap.clear();
         if (envoySettings.isEnvoyRunTimerEnabled()) {
             setNextEnvoy(getEnvoyCooldown());
             resetWarnings();
         }
         EnvoyControl.clearCooldowns();
     }
-    
+
     /**
      * Get a list of all the tiers.
+     *
      * @return List of all the tiers.
      */
     public List<Tier> getTiers() {
         return tiers;
     }
-    
+
     /**
      * Get a tier from its name.
+     *
      * @param tierName The name of the tier.
      * @return Returns a tier or will return null if not tier is found.
      */
@@ -829,10 +800,9 @@ public class CrazyEnvoy {
         }
         return null;
     }
-    
+
     /**
-     *
-     * @param loc The location the signals will be at.
+     * @param loc  The location the signals will be at.
      * @param tier The tier the signal is.
      */
     public void startSignalFlare(final Location loc, final Tier tier) {
@@ -844,9 +814,8 @@ public class CrazyEnvoy {
         }.runTaskTimer(plugin, getTimeSeconds(tier.getSignalFlareTimer()) * 20, getTimeSeconds(tier.getSignalFlareTimer()) * 20);
         activeSignals.put(loc, task);
     }
-    
+
     /**
-     *
      * @param loc The location that the signal is stopping.
      */
     public void stopSignalFlare(Location loc) {
@@ -856,17 +825,17 @@ public class CrazyEnvoy {
         }
         activeSignals.remove(loc);
     }
-    
+
     /**
-     *
      * @return The center location for the random crates.
      */
     public Location getCenter() {
         return center;
     }
-    
+
     /**
      * Sets the center location for the random crates.
+     *
      * @param loc The new center location.
      */
     public void setCenter(Location loc) {
@@ -875,40 +844,44 @@ public class CrazyEnvoy {
         Files.DATA.getFile().set("Center", getStringFromLocation(center));
         Files.DATA.saveFile();
     }
-    
+
     /**
      * Check if a player is ignoring the messages.
+     *
      * @param uuid The player's UUID.
      * @return True if they are ignoring them and false if not.
      */
     public boolean isIgnoringMessages(UUID uuid) {
         return ignoreMessages.contains(uuid);
     }
-    
+
     /**
      * Make a player ignore the messages.
+     *
      * @param uuid The player's UUID.
      */
     public void addIgnorePlayer(UUID uuid) {
         ignoreMessages.add(uuid);
     }
-    
+
     /**
      * Make a player stop ignoring the messages.
+     *
      * @param uuid The player's UUID.
      */
     public void removeIgnorePlayer(UUID uuid) {
         ignoreMessages.remove(uuid);
     }
-    
+
     /**
      * Get the Plugin of this plugin.
+     *
      * @return The Plugin object.
      */
     public Plugin getPlugin() {
         return plugin;
     }
-    
+
     /**
      * Used to clean all spawn locations and set them back to air.
      */
@@ -932,9 +905,10 @@ public class CrazyEnvoy {
         Files.DATA.getFile().set("Locations.Spawned", new ArrayList<>());
         Files.DATA.saveFile();
     }
-    
+
     /**
      * Add a location to the cleaning list of where crates actually spawned.
+     *
      * @param block block the crate spawned at.
      */
     public void addSpawnedLocation(Block block) {
@@ -942,15 +916,15 @@ public class CrazyEnvoy {
             spawnedLocations.add(block);
         }
     }
-    
+
     public List<Block> getSpawnedLocations() {
         return spawnedLocations;
     }
-    
+
     private void setEnvoyActive(boolean toggle) {
         envoyActive = toggle;
     }
-    
+
     private Calendar getEnvoyCooldown() {
         Calendar cal = Calendar.getInstance();
         if (envoySettings.isEnvoyCooldownEnabled()) {
@@ -987,7 +961,7 @@ public class CrazyEnvoy {
         }
         return cal;
     }
-    
+
     private Calendar getEnvoyRunTimeCalendar() {
         Calendar cal = Calendar.getInstance();
         String time = envoySettings.getEnvoyRunTimer().toLowerCase();
@@ -1004,14 +978,14 @@ public class CrazyEnvoy {
         }
         return cal;
     }
-    
+
     private String getStringFromLocation(Location location) {
         return "World:" + location.getWorld().getName()
-        + ", X:" + location.getBlockX()
-        + ", Y:" + location.getBlockY()
-        + ", Z:" + location.getBlockZ();
+                + ", X:" + location.getBlockX()
+                + ", Y:" + location.getBlockY()
+                + ", Z:" + location.getBlockZ();
     }
-    
+
     private List<String> getStringsFromLocationList(List<Block> stringList) {
         ArrayList<String> strings = new ArrayList<>();
         for (Block block : stringList) {
@@ -1019,7 +993,7 @@ public class CrazyEnvoy {
         }
         return strings;
     }
-    
+
     private Location getLocationFromString(String locationString) {
         World w = Bukkit.getWorlds().get(0);
         int x = 0;
@@ -1038,7 +1012,7 @@ public class CrazyEnvoy {
         }
         return new Location(w, x, y, z);
     }
-    
+
     private List<Block> getLocationsFromStringList(List<String> locationsList) {
         ArrayList<Block> locations = new ArrayList<>();
         for (String location : locationsList) {
@@ -1046,7 +1020,7 @@ public class CrazyEnvoy {
         }
         return locations;
     }
-    
+
     private void playSignal(Location loc, Tier tier) {
         List<Color> colors = tier.getFireworkColors();
         Firework firework = loc.getWorld().spawn(loc, Firework.class);
@@ -1056,7 +1030,7 @@ public class CrazyEnvoy {
         firework.setFireworkMeta(fireworkMeta);
         FireworkDamageAPI.addFirework(firework);
     }
-    
+
     private List<Block> getBlocks(Location location, int radius) {
         Location locations2 = location.clone();
         location.add(-radius, 0, -radius);
@@ -1075,7 +1049,7 @@ public class CrazyEnvoy {
         }
         return locations;
     }
-    
+
     private int getTimeSeconds(String time) {
         int seconds = 0;
         for (String i : time.split(" ")) {
@@ -1091,7 +1065,7 @@ public class CrazyEnvoy {
         }
         return seconds;
     }
-    
+
     private Tier pickRandomTier() {
         if (cechedChances.isEmpty()) {
             for (Tier tier : tiers) {
@@ -1102,5 +1076,5 @@ public class CrazyEnvoy {
         }
         return cechedChances.get(random.nextInt(cechedChances.size()));
     }
-    
+
 }

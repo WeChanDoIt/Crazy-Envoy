@@ -25,16 +25,14 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /**
- *
  * The ItemBuilder is designed to make creating items easier by creating an easy to use Builder.
  * This will allow you to covert an existing ItemStack into an ItemBuilder to allow you to edit
  * an existing ItemStack or make a new ItemStack from scratch.
  *
  * @author BadBones69
- *
  */
 public class ItemBuilder implements Cloneable {
-    
+
     private static boolean useNewMaterial = Version.isNewer(Version.v1_12_R1);
     private Material material;
     private int damage;
@@ -66,7 +64,7 @@ public class ItemBuilder implements Cloneable {
     private Map<String, String> namePlaceholders;
     private Map<String, String> lorePlaceholders;
     private List<ItemFlag> itemFlags;
-    
+
     /**
      * The initial starting point for making an item.
      */
@@ -101,42 +99,37 @@ public class ItemBuilder implements Cloneable {
         this.lorePlaceholders = new HashMap<>();
         this.itemFlags = new ArrayList<>();
     }
-    
+
     /**
      * Convert an ItemStack to an ItemBuilder to allow easier editing of the ItemStack.
+     *
      * @param item The ItemStack you wish to convert into an ItemBuilder.
      * @return The ItemStack as an ItemBuilder with all the info from the item.
      */
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
     public static ItemBuilder convertItemStack(ItemStack item) {
         ItemBuilder itemBuilder = new ItemBuilder()
-        .setReferenceItem(item)
-        .setAmount(item.getAmount())
-        .setMaterial(item.getType())
-        .setEnchantments(new HashMap<>(item.getEnchantments()));
+                .setReferenceItem(item)
+                .setAmount(item.getAmount())
+                .setMaterial(item.getType())
+                .setEnchantments(new HashMap<>(item.getEnchantments()));
         if (item.hasItemMeta()) {
             ItemMeta itemMeta = item.getItemMeta();
             itemBuilder.setName(itemMeta.getDisplayName())
-            .setLore(itemMeta.getLore());
+                    .setLore(itemMeta.getLore());
             NBTItem nbt = new NBTItem(item);
             if (nbt.hasKey("Unbreakable")) {
                 itemBuilder.setUnbreakable(nbt.getBoolean("Unbreakable"));
             }
-            if (useNewMaterial) {
-                if (itemMeta instanceof Damageable) {
-                    itemBuilder.setDamage(((Damageable) itemMeta).getDamage());
-                }
-            } else {
-                itemBuilder.setDamage(item.getDurability());
-            }
+            itemBuilder.setDamage(item.getDurability());
         }
         return itemBuilder;
     }
-    
+
     public static ItemBuilder convertString(String itemString) {
         return convertString(itemString, null);
     }
-    
+
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
     public static ItemBuilder convertString(String itemString, String placeHolder) {
         ItemBuilder itemBuilder = new ItemBuilder();
@@ -206,25 +199,27 @@ public class ItemBuilder implements Cloneable {
         }
         return itemBuilder;
     }
-    
+
     public static List<ItemBuilder> convertStringList(List<String> itemStrings) {
         return convertStringList(itemStrings, null);
     }
-    
+
     public static List<ItemBuilder> convertStringList(List<String> itemStrings, String placeholder) {
         return itemStrings.stream().map(itemString -> convertString(itemString, placeholder)).collect(Collectors.toList());
     }
-    
+
     /**
      * Get the type of item as a Material the builder is set to.
+     *
      * @return The type of material the builder is set to.
      */
     public Material getMaterial() {
         return material;
     }
-    
+
     /**
      * Set the type of item the builder is set to.
+     *
      * @param material The material you wish to set.
      * @return The ItemBuilder with updated info.
      */
@@ -233,9 +228,10 @@ public class ItemBuilder implements Cloneable {
         this.isHead = material == (useNewMaterial ? Material.matchMaterial("PLAYER_HEAD") : Material.matchMaterial("SKULL_ITEM"));
         return this;
     }
-    
+
     /**
      * Set the type of item and its metadata in the builder.
+     *
      * @param materialString The string must be in this form: %Material% or %Material%:%MetaData%
      * @return The ItemBuilder with updated info.
      */
@@ -321,9 +317,10 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Set the type of item and its metadata in the builder.
+     *
      * @param newMaterial The 1.13+ string must be in this form: %Material% or %Material%:%MetaData%
      * @param oldMaterial The 1.12.2- string must be in this form: %Material% or %Material%:%MetaData%
      * @return The ItemBuilder with updated info.
@@ -331,34 +328,38 @@ public class ItemBuilder implements Cloneable {
     public ItemBuilder setMaterial(String newMaterial, String oldMaterial) {
         return setMaterial(useNewMaterial ? newMaterial : oldMaterial);
     }
-    
+
     /**
      * Get the damage of the item.
+     *
      * @return The damage of the item as an int.
      */
     public int getDamage() {
         return damage;
     }
-    
+
     /**
      * Set the items damage value.
+     *
      * @param damage The damage value of the item.
      */
     public ItemBuilder setDamage(int damage) {
         this.damage = damage;
         return this;
     }
-    
+
     /**
      * Get the name the of the item in the builder.
+     *
      * @return The name as a string that is already been color converted.
      */
     public String getName() {
         return name;
     }
-    
+
     /**
      * Set the name of the item in the builder. This will auto force color the name if it contains color code. (&a, &c, &7, etc...)
+     *
      * @param name The name of the item in the builder.
      * @return The ItemBuilder with updated info.
      */
@@ -368,9 +369,10 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Set the placeholders for the name of the item.
+     *
      * @param placeholders The placeholders that will be used.
      * @return The ItemBuilder with updated info.
      */
@@ -378,20 +380,22 @@ public class ItemBuilder implements Cloneable {
         this.namePlaceholders = placeholders;
         return this;
     }
-    
+
     /**
      * Add a placeholder to the name of the item.
+     *
      * @param placeholder The placeholder that will be replaced.
-     * @param argument The argument you wish to replace the placeholder with.
+     * @param argument    The argument you wish to replace the placeholder with.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addNamePlaceholder(String placeholder, String argument) {
         this.namePlaceholders.put(placeholder, argument);
         return this;
     }
-    
+
     /**
      * Remove a placeholder from the list.
+     *
      * @param placeholder The placeholder you wish to remove.
      * @return The ItemBuilder with updated info.
      */
@@ -399,9 +403,10 @@ public class ItemBuilder implements Cloneable {
         this.namePlaceholders.remove(placeholder);
         return this;
     }
-    
+
     /**
      * Get the item's name with all the placeholders added to it.
+     *
      * @return The name with all the placeholders in it.
      */
     public String getUpdatedName() {
@@ -411,17 +416,19 @@ public class ItemBuilder implements Cloneable {
         }
         return newName;
     }
-    
+
     /**
      * Get the lore of the item in the builder.
+     *
      * @return The lore of the item in the builder. This will already be color coded.
      */
     public List<String> getLore() {
         return lore;
     }
-    
+
     /**
      * Set the lore of the item in the builder. This will auto force color in all the lores that contains color code. (&a, &c, &7, etc...)
+     *
      * @param lore The lore of the item in the builder.
      * @return The ItemBuilder with updated info.
      */
@@ -434,9 +441,10 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Add a line to the current lore of the item. This will auto force color in the lore that contains color code. (&a, &c, &7, etc...)
+     *
      * @param lore The new line you wish to add.
      * @return The ItemBuilder with updated info.
      */
@@ -446,9 +454,10 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Set the placeholders that are in the lore of the item.
+     *
      * @param placeholders The placeholders that you wish to use.
      * @return The ItemBuilder with updated info.
      */
@@ -456,31 +465,34 @@ public class ItemBuilder implements Cloneable {
         this.lorePlaceholders = placeholders;
         return this;
     }
-    
+
     /**
      * Add a placeholder to the lore of the item.
+     *
      * @param placeholder The placeholder you wish to replace.
-     * @param argument The argument that will replace the placeholder.
+     * @param argument    The argument that will replace the placeholder.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLorePlaceholder(String placeholder, String argument) {
         this.lorePlaceholders.put(placeholder, argument);
         return this;
     }
-    
+
     /**
      * Add a placeholder to the lore of the item.
+     *
      * @param placeholder The placeholder you wish to replace.
-     * @param argument The argument that will replace the placeholder.
+     * @param argument    The argument that will replace the placeholder.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addLorePlaceholder(String placeholder, int argument) {
         this.lorePlaceholders.put(placeholder, argument + "");
         return this;
     }
-    
+
     /**
      * Remove a placeholder from the lore.
+     *
      * @param placeholder The placeholder you wish to remove.
      * @return The ItemBuilder with updated info.
      */
@@ -488,9 +500,10 @@ public class ItemBuilder implements Cloneable {
         this.lorePlaceholders.remove(placeholder);
         return this;
     }
-    
+
     /**
      * Get the lore with all the placeholders added to it.
+     *
      * @return The lore with all placeholders in it.
      */
     public List<String> getUpdatedLore() {
@@ -503,17 +516,19 @@ public class ItemBuilder implements Cloneable {
         }
         return newLore;
     }
-    
+
     /**
      * Get the entity type of the mob egg.
+     *
      * @return The EntityType of the mob egg.
      */
     public EntityType getEntityType() {
         return entityType;
     }
-    
+
     /**
      * Sets the type of mob egg.
+     *
      * @param entityType The entity type the mob egg will be.
      * @return The ItemBuilder with updated info.
      */
@@ -521,63 +536,67 @@ public class ItemBuilder implements Cloneable {
         this.entityType = entityType;
         return this;
     }
-    
+
     public boolean isTippedArrow() {
         return isTippedArrow;
     }
-    
+
     /**
      * Get the type of potion effect on the item. Only works on Tipped Arrows.
+     *
      * @return The PotionType set to the item.
      */
     public PotionType getPotionType() {
         return potionType;
     }
-    
+
     /**
      * Set the PotionType on the item.
+     *
      * @param potionType The PotionType added to the item.
      */
     public void setPotionType(PotionType potionType) {
         this.potionType = potionType;
     }
-    
+
     public Color getPotionColor() {
         return potionColor;
     }
-    
+
     public void setPotionColor(Color potionColor) {
         this.potionColor = potionColor;
     }
-    
+
     public boolean isPotion() {
         return isPotion;
     }
-    
+
     /**
      * Get the color leather armor is set to.
+     *
      * @return The Color the armor is set to.
      */
     public Color getArmorColor() {
         return armorColor;
     }
-    
+
     /**
      * Set the color the Leather Armor is going to be.
+     *
      * @param armorColor The color of the leather armor.
      */
     public void setArmorColor(Color armorColor) {
         this.armorColor = armorColor;
     }
-    
+
     public boolean isLeatherArmor() {
         return isLeatherArmor;
     }
-    
+
     public List<Pattern> getPatterns() {
         return patterns;
     }
-    
+
     public ItemBuilder addPattern(String stringPattern) {
         try {
             String[] split = stringPattern.split(":");
@@ -594,48 +613,51 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     public ItemBuilder addPatterns(List<String> stringList) {
-        stringList.forEach(this :: addPattern);
+        stringList.forEach(this::addPattern);
         return this;
     }
-    
+
     public ItemBuilder addPattern(Pattern pattern) {
         patterns.add(pattern);
         return this;
     }
-    
+
     public ItemBuilder setPatterns(List<Pattern> patterns) {
         this.patterns = patterns;
         return this;
     }
-    
+
     public boolean isBanner() {
         return isBanner;
     }
-    
+
     public boolean isShield() {
         return isShield;
     }
-    
+
     /**
      * Check if the current item is a mob egg.
+     *
      * @return True if it is and false if not.
      */
     public boolean isMobEgg() {
         return isMobEgg;
     }
-    
+
     /**
      * The amount of the item stack in the builder.
+     *
      * @return The amount that is set in the builder.
      */
     public int getAmount() {
         return amount;
     }
-    
+
     /**
      * Get the amount of the item stack in the builder.
+     *
      * @param amount The amount that is in the item stack.
      * @return The ItemBuilder with updated info.
      */
@@ -643,17 +665,19 @@ public class ItemBuilder implements Cloneable {
         this.amount = amount;
         return this;
     }
-    
+
     /**
      * Get the name of the player being used as a head.
+     *
      * @return The name of the player being used on the head.
      */
     public String getPlayer() {
         return player;
     }
-    
+
     /**
      * Set the player that will be displayed on the head.
+     *
      * @param player The player being displayed on the head.
      * @return The ItemBuilder with updated info.
      */
@@ -665,42 +689,47 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Check if the item is a player heads.
+     *
      * @return True if it is a player head and false if not.
      */
     public boolean isHead() {
         return isHead;
     }
-    
+
     /**
      * Check if the player name is a Base64.
+     *
      * @return True if it is a Base64 and false if not.
      */
     public boolean isHash() {
         return isHash;
     }
-    
+
     /**
      * Check if the hash is a url or a Base64.
+     *
      * @return True if it is a url and false if it is a Base64.
      */
     public boolean isURL() {
         return isURL;
     }
-    
+
     /**
      * Get the enchantments that are on the item in the builder.
+     *
      * @return The enchantments that are on the item in the builder.
      */
     public Map<Enchantment, Integer> getEnchantments() {
         return enchantments;
     }
-    
+
     /**
      * Set a list of enchantments that will go onto the item in the builder. These can have unsafe levels.
      * It will also override any enchantments used in the "ItemBuilder#addEnchantment()" method.
+     *
      * @param enchantments A list of enchantments that will go onto the item in the builder.
      * @return The ItemBuilder with updated info.
      */
@@ -710,20 +739,22 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     /**
      * Add an enchantment to the item in the builder.
+     *
      * @param enchantment The enchantment you wish to add.
-     * @param level The level of the enchantment. This can be unsafe levels.
+     * @param level       The level of the enchantment. This can be unsafe levels.
      * @return The ItemBuilder with updated info.
      */
     public ItemBuilder addEnchantments(Enchantment enchantment, int level) {
         this.enchantments.put(enchantment, level);
         return this;
     }
-    
+
     /**
      * Remove an enchantment from the item in the builder.
+     *
      * @param enchantment The enchantment you wish to remove.
      * @return The ItemBuilder with updated info.
      */
@@ -731,17 +762,19 @@ public class ItemBuilder implements Cloneable {
         this.enchantments.remove(enchantment);
         return this;
     }
-    
+
     /**
      * Check if the item in the builder is unbreakable.
+     *
      * @return The ItemBuilder with updated info.
      */
     public boolean isUnbreakable() {
         return unbreakable;
     }
-    
+
     /**
      * Set if the item in the builder to be unbreakable or not.
+     *
      * @param unbreakable True will set it to be unbreakable and false will make it able to take damage.
      * @return The ItemBuilder with updated info.
      */
@@ -749,9 +782,10 @@ public class ItemBuilder implements Cloneable {
         this.unbreakable = unbreakable;
         return this;
     }
-    
+
     /**
      * Set if the item should hide item flags or not
+     *
      * @param hideItemFlags true the item will hide item flags. false will show them.
      * @return The ItemBuilder with updated info.
      */
@@ -759,25 +793,28 @@ public class ItemBuilder implements Cloneable {
         this.hideItemFlags = hideItemFlags;
         return this;
     }
-    
+
     /**
      * Check if the item in the builder has hidden item flags.
+     *
      * @return The ItemBuilder with updated info.
      */
     public boolean areItemFlagsHidden() {
         return hideItemFlags;
     }
-    
+
     /**
      * Check if the item in the builder is glowing.
+     *
      * @return The ItemBuilder with updated info.
      */
     public boolean isGlowing() {
         return glowing;
     }
-    
+
     /**
      * Set if the item in the builder to be glowing or not.
+     *
      * @param glowing True will set the item to have a glowing effect.
      * @return The ItemBuilder with updated info.
      */
@@ -785,11 +822,11 @@ public class ItemBuilder implements Cloneable {
         this.glowing = glowing;
         return this;
     }
-    
+
     public List<ItemFlag> getItemFlags() {
         return itemFlags;
     }
-    
+
     public ItemBuilder addItemFlag(String flagString) {
         try {
             addItemFlag(ItemFlag.valueOf(flagString.toUpperCase()));
@@ -797,7 +834,7 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     public ItemBuilder addItemFlags(List<String> flagStrings) {
         for (String flagString : flagStrings) {
             try {
@@ -810,21 +847,22 @@ public class ItemBuilder implements Cloneable {
         }
         return this;
     }
-    
+
     public ItemBuilder addItemFlag(ItemFlag itemFlag) {
         if (itemFlag != null) {
             itemFlags.add(itemFlag);
         }
         return this;
     }
-    
+
     public ItemBuilder setItemFlags(List<ItemFlag> itemFlags) {
         this.itemFlags = itemFlags;
         return this;
     }
-    
+
     /**
      * Builder the item from all the information that was given to the builder.
+     *
      * @return The result of all the info that was given to the builder as an ItemStack.
      */
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
@@ -851,9 +889,7 @@ public class ItemBuilder implements Cloneable {
                 itemMeta.setUnbreakable(unbreakable);
             }
             if (Version.isNewer(Version.v1_12_R1)) {
-                if (itemMeta instanceof Damageable) {
-                    ((Damageable) itemMeta).setDamage(damage);
-                }
+                item.setDurability(item.getDurability());
             } else {
                 item.setDurability((short) damage);
             }
@@ -881,10 +917,7 @@ public class ItemBuilder implements Cloneable {
                 banner.update();
                 shieldMeta.setBlockState(banner);
             }
-            if (useCustomModelData) {
-                itemMeta.setCustomModelData(customModelData);
-            }
-            itemFlags.forEach(itemMeta :: addItemFlags);
+            itemFlags.forEach(itemMeta::addItemFlags);
             item.setItemMeta(itemMeta);
             hideFlags(item);
             item.addUnsafeEnchantments(enchantments);
@@ -905,9 +938,10 @@ public class ItemBuilder implements Cloneable {
             return item;
         }
     }
-    
+
     /**
      * Get a clone of the object.
+     *
      * @return a new cloned object.
      */
     public ItemBuilder clone() {
@@ -918,9 +952,10 @@ public class ItemBuilder implements Cloneable {
         }
         return new ItemBuilder();
     }
-    
+
     /**
      * Sets the converted item as a reference to try and save NBT tags and stuff.
+     *
      * @param referenceItem The item that is being referenced.
      * @return The ItemBuilder with updated info.
      */
@@ -928,11 +963,11 @@ public class ItemBuilder implements Cloneable {
         this.referenceItem = referenceItem;
         return this;
     }
-    
+
     private String color(String msg) {
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
-    
+
     private ItemStack hideFlags(ItemStack item) {
         if (hideItemFlags && item != null && item.hasItemMeta()) {
             ItemMeta itemMeta = item.getItemMeta();
@@ -942,7 +977,7 @@ public class ItemBuilder implements Cloneable {
         }
         return item;
     }
-    
+
     private ItemStack addGlow(ItemStack item) {
         if (glowing) {
             try {
@@ -962,7 +997,7 @@ public class ItemBuilder implements Cloneable {
         }
         return item;
     }
-    
+
     private PotionType getPotionType(PotionEffectType type) {
         if (type != null) {
             if (type.equals(PotionEffectType.FIRE_RESISTANCE)) {
@@ -997,7 +1032,7 @@ public class ItemBuilder implements Cloneable {
         }
         return null;
     }
-    
+
     private static Color getColor(String color) {
         if (color != null) {
             switch (color.toUpperCase()) {
@@ -1044,7 +1079,7 @@ public class ItemBuilder implements Cloneable {
         }
         return null;
     }
-    
+
     private static DyeColor getDyeColor(String color) {
         if (color != null) {
             try {
@@ -1059,19 +1094,19 @@ public class ItemBuilder implements Cloneable {
         }
         return null;
     }
-    
+
     @SuppressWarnings({"deprecation", "squid:CallToDeprecatedMethod"})
     private static Enchantment getEnchantment(String enchantmentName) {
         enchantmentName = stripEnchantmentName(enchantmentName);
         for (Enchantment enchantment : Enchantment.values()) {
             try {
                 //MC 1.13+ has the correct names.
-                if (Version.isNewer(Version.v1_12_R1) && stripEnchantmentName(enchantment.getKey().getKey()).equalsIgnoreCase(enchantmentName)) {
+                if (Version.isNewer(Version.v1_12_R1) && stripEnchantmentName(enchantment.getName()).equalsIgnoreCase(enchantmentName)) {
                     return enchantment;
                 }
                 HashMap<String, String> enchantments = getEnchantmentList();
                 if (stripEnchantmentName(enchantment.getName()).equalsIgnoreCase(enchantmentName) || (enchantments.get(enchantment.getName()) != null &&
-                stripEnchantmentName(enchantments.get(enchantment.getName())).equalsIgnoreCase(enchantmentName))) {
+                        stripEnchantmentName(enchantments.get(enchantment.getName())).equalsIgnoreCase(enchantmentName))) {
                     return enchantment;
                 }
             } catch (Exception ignore) {//If any null enchantments are found they may cause errors.
@@ -1079,11 +1114,11 @@ public class ItemBuilder implements Cloneable {
         }
         return null;
     }
-    
+
     private static String stripEnchantmentName(String enchantmentName) {
         return enchantmentName != null ? enchantmentName.replace("-", "").replace("_", "").replace(" ", "") : null;
     }
-    
+
     private static HashMap<String, String> getEnchantmentList() {
         HashMap<String, String> enchantments = new HashMap<>();
         enchantments.put("ARROW_DAMAGE", "Power");
@@ -1122,5 +1157,5 @@ public class ItemBuilder implements Cloneable {
         enchantments.put("LOYALTY", "Loyalty");
         return enchantments;
     }
-    
+
 }

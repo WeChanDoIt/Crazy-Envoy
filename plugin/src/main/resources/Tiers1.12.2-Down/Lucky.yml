@@ -10,6 +10,7 @@ Settings:
   Hologram-Height: 1.5
   Hologram:
     - '&7&l(&e&l!&7&l) &e&lLucky Crate'
+    - '&bSkydrops Left: &f<amount>'
   Firework-Toggle: true
   Firework-Colors:
     - 'Gray'

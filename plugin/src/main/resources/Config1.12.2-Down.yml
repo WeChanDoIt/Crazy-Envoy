@@ -1,33 +1,31 @@
 Settings:
-  Prefix: '&7[&cCrazyEnvoy&7]: ' #The prefix before the messages CrazyEnvoys sends.
+  Prefix: '' #The prefix before the messages CrazyEnvoys sends.
   Toggle-Metrics: true #Turn on and off if your server stats are sent to https://bstats.org/plugin/bukkit/CrazyEnvoy.
   Falling-Block-Toggle: true #Toggle if it spawns a falling block or if the crates just appear.
-  Falling-Block: '138' #The block that will be falling.
+  Falling-Block: '54' #The block that will be falling.
   Fall-Height: 15 #How high the falling blocks spawn.
-  Max-Crate-Toggle: false #If true then only a specified amount of crates will spawn and if false then all crates will spawn.
+  Max-Crate-Toggle: true #If true then only a specified amount of crates will spawn and if false then all crates will spawn.
   Max-Crates: 20 #The max amount of crates that will spawn.
   Random-Locations: false #If true you will need to make sure to set the center location.
   Max-Radius: 300 #The maximum distance the crates will fall from the center.
   Min-Radius: 20 #The minimum distance from the middle the crates will fall from.
-  Envoy-Run-Time: '5m' #The amount of time the crazyenvoy event will go for.
-  Envoy-Timer-Toggle: true #If the crazyenvoy will happen on an interval. If false the only wait it will start is if its started with the command or flare.
-  Envoy-Cooldown-Toggle: true #Toggle if it uses a cooldown or a specified time of the day.
-  Envoy-Cooldown: '1h' #The time till the crazyenvoy event will happen again.
-  Envoy-Time: '2:00 AM' #A specified time of the day that an crazyenvoy will happen. Please use 1-12 for hours and 0-59 for minutes.
-  Minimum-Players-Toggle: false #When the crazyenvoy is about to start toggle if there needs to be a minimum amount of players. (Does not affect flares)
+  Envoy-Run-Time: '10m' #The amount of time the skydrop event will go for.
+  Envoy-Timer-Toggle: true #If the skydrop will happen on an interval. If false the only wait it will start is if its started with the command or flare.
+  Envoy-Cooldown-Toggle: true #Toggle if it uses a skydrop or a specified time of the day.
+  Envoy-Cooldown: '10m' #The time till the skydrop event will happen again.
+  Envoy-Time: '2:00 AM' #A specified time of the day that an skydrop will happen. Please use 1-12 for hours and 0-59 for minutes.
+  Minimum-Players-Toggle: false #When the skydrop is about to start toggle if there needs to be a minimum amount of players. (Does not affect flares)
   Minimum-Flare-Toggle: false #Toggle if using a flare has to meet the minimum players requirement. Minimum-Players-Toggle must be true for this to work.
-  Minimum-Players: 12 #The minimum amount of players needed to start the crazyenvoy.
+  Minimum-Players: 12 #The minimum amount of players needed to start the skydrop.
   Broadcast-Crate-Pick-Up: true #Toggle if when a player gets a crate if it broadcasts the message.
   Crate-Collect-Cooldown: #If when a player collects a crate if they have to wait to collect another.
     Toggle: true #Toggle this option on and off.
-    Time: '15s' #The time till they have to wait.
+    Time: '5s' #The time till they have to wait.
   World-Messages:
     Toggle: false #Toggle if the broadcast messages are only in a specific worlds.
     Worlds: #The worlds you wish to have the messages only show up in.
       - 'world'
   Envoy-Warnings: #The times that will make the warning messages.
-    - '30m'
-    - '15m'
     - '10m'
     - '1m'
     - '30s'
@@ -37,12 +35,180 @@ Settings:
     - '3s'
     - '1s'
   Flares: #Options about flares. Players need the crazyenvoy.flare.use permission to use the flares.
-    Item: '76' #The time the flares are.
-    Name: '&7&l(&4&l!&7&l) &cFlare' #The name of the flare.
+    Item: 'BLAZE_ROD' #The time the flares are.
+    Name: '&c&lSkydrop Wand' #The name of the flare.
     Lore: #The lore of the flare.
-      - '&7Right click me to'
-      - '&7start an crazyenvoy event.'
+      - '&7Take this to warzone and activate it'
+      - '&7to start a skydrop.'
     World-Guard: #The options for when using world guard regions to make flares work only in those regions.
       Toggle: false #If they have to use flares in specified regions.
       Regions: #The name of the regions you can use flares in.
         - 'WarZone'
+  Lock-Pick: #Options about lock-picks. Players need the crazyenvoy.lock-pick.use permission to use the lock-picks.
+    Item: 'TRIPWIRE_HOOK' #The time the lock-picks are.
+    Name: '&c&lLock-Pick' #The name of the lock-pick.
+    Lore: #The lore of the lock-pick.
+      - '&7Use this on a skydrop'
+      - '&7to pick the lock'
+      - '&7and instantly gain its loot!'
+    World-Guard: #The options for when using world guard regions to make lock-picks work only in those regions.
+      Toggle: false #If they have to use lock-picks in specified regions.
+      Regions: #The name of the regions you can use lock-picks in.
+        - 'WarZone'
+
+captchaBlocks:
+  - ACACIA_DOOR_ITEM
+  - ACACIA_FENCE
+  - ACACIA_FENCE_GATE
+  - ACACIA_STAIRS
+  - ACTIVATOR_RAIL
+  - ANVIL
+  - APPLE
+  - ARMOR_STAND
+  - ARROW
+  - BAKED_POTATO
+  - BARRIER
+  - BEACON
+  - BEETROOT
+  - BEETROOT_SEEDS
+  - BEETROOT_SOUP
+  - BIRCH_DOOR_ITEM
+  - BIRCH_FENCE
+  - BIRCH_FENCE_GATE
+  - BLACK_GLAZED_TERRACOTTA
+  - BLACK_SHULKER_BOX
+  - BLAZE_POWDER
+  - BLAZE_ROD
+  - BLUE_GLAZED_TERRACOTTA
+  - BLUE_SHULKER_BOX
+  - BOAT
+  - BOAT_ACACIA
+  - BOAT_BIRCH
+  - BOAT_DARK_OAK
+  - BOAT_JUNGLE
+  - BOAT_SPRUCE
+  - BONE
+  - BONE_BLOCK
+  - BOOK
+  - BOOKSHELF
+  - BOW
+  - BOWL
+  - BRED
+  - BREWING_STAND_ITEM
+  - BRICK
+  - BROWN_MUSHROOM
+  - BROWN_GLAZED_TERRACOTTA
+  - BROWN_SHULKER_BOX
+  - BUCKET
+  - CACTUS
+  - CAKE
+  - CARPET
+  - CARROT_ITEM
+  - CARROT_STICK
+  - CAULDRON_ITEM
+  - CHEST
+  - CLAY
+  - CLAY_BALL
+  - CLAY_BRICK
+  - COAL
+  - COAL_ORE
+  - COBBLE_WALL
+  - COBBLESTONE
+  - COMPASS
+  - COOKED_BEEF
+  - COOKED_CHICKEN
+  - COOKED_MUTTON
+  - COOKED_RABBIT
+  - COOKIE
+  - CYAN_GLAZED_TERRACOTTA
+  - CYAN_SHULKER_BOX
+  - DARK_OAK_DOOR_ITEM
+  - DARK_OAK_FENCE
+  - DARK_OAK_FENCE_GATE
+  - DAYLIGHT_DETECTOR
+  - DEAD_BUSH
+  - DETECTOR_RAIL
+  - DIAMOND
+  - DIAMOND_BLOCK
+  - DIAMOND_ORE
+  - DIRT
+  - DISPENSER
+  - DRAGON_EGG
+  - EGG
+  - EMERALD
+  - EMERALD_BLOCK
+  - EMERALD_ORE
+  - ENCHANTED_BOOK
+  - ENCHANTMENT_TABLE
+  - END_ROD
+  - ENDER_CHEST
+  - ENDER_PEARL
+  - EXP_BOTTLE
+  - EYE_OF_ENDER
+  - FEATHER
+  - FERMENTED_SPIDER_EYE
+  - FIREBALL
+  - FIREWORK
+  - FLINT
+  - FLOWER_POT_ITEM
+  - FURNACE
+  - GHAST_TEAR
+  - GLASS_BOTTLE
+  - GLOWSTONE_DUST
+  - GOLD_INGOT
+  - GOLD_BLOCK
+  - GOLD_ORE
+  - GOLDEN_APPLE
+  - GRAVEL
+  - GRILLED_PORK
+  - ICE
+  - IRON_INGOT
+  - IRON_DOOR
+  - IRON_BLOCK
+  - IRON_ORE
+  - ITEM_FRAME
+  - JUKEBOX
+  - JUNGLE_DOOR_ITEM
+  - JUNGLE_FENCE
+  - JUNGLE_FENCE_GATE
+  - LADDER
+  - LAPIS_BLOCK
+  - LAPIS_ORE
+  - LAVA_BUCKET
+  - LEASH
+  - LEATHER
+  - LEVER
+  - LONG_GRASS
+  - MAGMA_CREAM
+  - MELON
+  - MINECART
+  - MUTTON
+  - MYCEL
+  - NAME_TAG
+  - NOTE_BLOCK
+  - OBSIDIAN
+  - PAINTING
+  - PAPER
+  - POTATO_ITEM
+  - PORK
+  - PUMPKIN
+  - POWERED_RAIL
+  - RAW_BEEF
+  - RECORD_9
+  - RED_ROSE
+  - REDSTONE
+  - SEEDS
+  - SAND
+  - SADDLE
+  - SIGN
+  - SULKER_SHELL
+  - SHEERS
+  - SPIDER_EYE
+  - SUGAR
+  - SULPHUR
+  - VINE
+  - WATCH
+  - WEB
+  - WOOD
+  - WHEAT
+  - WOOL

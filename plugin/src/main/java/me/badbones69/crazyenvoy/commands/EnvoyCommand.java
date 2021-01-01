@@ -9,6 +9,7 @@ import me.badbones69.crazyenvoy.api.events.EnvoyEndEvent.EnvoyEndReason;
 import me.badbones69.crazyenvoy.api.events.EnvoyStartEvent;
 import me.badbones69.crazyenvoy.api.events.EnvoyStartEvent.EnvoyStartReason;
 import me.badbones69.crazyenvoy.api.objects.Flare;
+import me.badbones69.crazyenvoy.api.objects.LockPick;
 import me.badbones69.crazyenvoy.controllers.EditControl;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,7 +36,7 @@ public class EnvoyCommand implements CommandExecutor {
                 Messages.NO_PERMISSION.sendMessage(sender);
                 return true;
             }
-            Bukkit.dispatchCommand(sender, "envoy time");
+            Bukkit.dispatchCommand(sender, "skydrop time");
         } else {
             switch (args[0].toLowerCase()) {
                 case "help":
@@ -91,8 +92,49 @@ public class EnvoyCommand implements CommandExecutor {
                         Messages.NO_PERMISSION.sendMessage(sender);
                     }
                     return true;
-                case "flare":// /Envoy Flare [Amount] [Player]
+                case "lock-pick":// /Envoy lock-pick [Amount] [Player]
                     if (hasPermission(sender, "flare.give")) {
+                        int amount = 1;
+                        Player player;
+                        if (args.length >= 2) {
+                            if (Methods.isInt(args[1])) {
+                                amount = Integer.parseInt(args[1]);
+                            } else {
+                                Messages.NOT_A_NUMBER.sendMessage(sender);
+                                return true;
+                            }
+                        }
+                        if (args.length >= 3) {
+                            if (Methods.isOnline(args[2])) {
+                                player = Methods.getPlayer(args[2]);
+                            } else {
+                                Messages.NOT_ONLINE.sendMessage(sender);
+                                return true;
+                            }
+                        } else {
+                            if (!(sender instanceof Player)) {
+                                Messages.PLAYERS_ONLY.sendMessage(sender);
+                                return true;
+                            } else {
+                                player = (Player) sender;
+                            }
+                        }
+                        HashMap<String, String> placeholder = new HashMap<>();
+                        placeholder.put("%player%", player.getName());
+                        placeholder.put("%Player%", player.getName());
+                        placeholder.put("%amount%", amount + "");
+                        placeholder.put("%Amount%", amount + "");
+                        Messages.GIVE_FLARE.sendMessage(sender, placeholder);
+                        if (!sender.getName().equalsIgnoreCase(player.getName())) {
+                            Messages.GIVEN_FLARE.sendMessage(player, placeholder);
+                        }
+                        LockPick.givePick(player, amount);
+                    } else {
+                        Messages.NO_PERMISSION.sendMessage(sender);
+                    }
+                    return true;
+                case "flare":// /Envoy lock-pick [Amount] [Player]
+                    if (hasPermission(sender, "lock-pick.give")) {
                         int amount = 1;
                         Player player;
                         if (args.length >= 2) {

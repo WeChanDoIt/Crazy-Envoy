@@ -8,6 +8,8 @@ public interface HologramController {
     void createHologram(Block block, Tier tier);
     
     void removeHologram(Block block);
+
+    void updateHolograms();
     
     void removeAllHolograms();
     

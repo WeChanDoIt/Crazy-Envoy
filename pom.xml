@@ -13,7 +13,6 @@
         <module>plugin</module>
         <module>api</module>
         <module>worldguard-v6</module>
-        <module>worldguard-v7</module>
     </modules>
 
     <properties>

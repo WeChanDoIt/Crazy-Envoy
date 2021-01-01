@@ -7,22 +7,23 @@ Settings:
     Random: true #If true then it will pick a random bulk from 1-MaxBulk.
     Max-Bulk: 3 #The max amount of prizes.
   Hologram-Toggle: true #Toggle on and off holograms.
-  Hologram-Height: 1.5 #How high the hologram will be from the crate.
+  Hologram-Height: 2.5 #How high the hologram will be from the crate.
   Hologram: #Holograms only show if Holographic Displays is on the server.
-    - '&7&l(&6&l!&7&l) Basic Crate'
-    - '&bSkydrops Left: &f<amount>'
+    - '&d&lRare'
+    - '&7Open This Skydrop to recieve &d&nRare &7Rewards'
+    - '&7Protect this at all costs to secure the loot!'
+    - ''
+    - '&dSkydrops Left: &f(<amount>)'
   Firework-Toggle: true #Toggle on or off fireworks.
   Firework-Colors: #The colors the fireworks will be.
-    - 'Gray'
-    - 'Black'
-    - 'Orange'
+    - 'White'
+    - 'Pink'
   Signal-Flare:
     Toggle: true
     Time: '15s'
     Colors:
-      - 'Gray'
-      - 'Black'
-      - 'Orange'
+      - 'White'
+      - 'Pink'
 ###################################
 #             Items: Options
 # Item:<ID:MD> - You can choose the item with its id and meta data.

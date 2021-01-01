@@ -66,6 +66,7 @@ public class FlareControl implements Listener {
                             Messages.USED_FLARE.sendMessage(player);
                             Flare.takeFlare(player);
                         }
+                        envoy.getHologramController().updateHolograms();
                     }
                 } else {
                     Messages.CANT_USE_FLARES.sendMessage(player);

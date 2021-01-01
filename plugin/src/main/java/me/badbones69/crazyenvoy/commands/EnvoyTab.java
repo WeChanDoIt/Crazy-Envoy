@@ -24,6 +24,7 @@ public class EnvoyTab implements TabCompleter {
             if (hasPermission(sender, "drops")) completions.add("drops");
             if (hasPermission(sender, "ignore")) completions.add("ignore");
             if (hasPermission(sender, "flare.give")) completions.add("flare");
+            if (hasPermission(sender, "lock-pick.give")) completions.add("lock-pick");
             if (hasPermission(sender, "edit")) completions.add("edit");
             if (hasPermission(sender, "start")) completions.add("start");
             if (hasPermission(sender, "stop")) completions.add("stop");
@@ -40,12 +41,13 @@ public class EnvoyTab implements TabCompleter {
                     for (int i = 1; i <= size; i++) completions.add(i + "");
                     break;
                 case "flare":
+                case "lock-pick":
                     for (int i = 1; i <= 64; i++) completions.add(i + "");
                     break;
             }
             return StringUtil.copyPartialMatches(args[1], completions, new ArrayList<>());
         } else if (args.length == 3) {// /envoy arg0 arg1
-            if ("flare".equalsIgnoreCase(args[0])) {
+            if ("flare".equalsIgnoreCase(args[0]) || "lock-pick".equalsIgnoreCase(args[0])) {
                 Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
             }
             return StringUtil.copyPartialMatches(args[2], completions, new ArrayList<>());

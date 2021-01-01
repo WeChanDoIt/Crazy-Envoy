@@ -1,10 +1,10 @@
-name: CrazyEnvoy
-author: BadBones69
+name: RetronixSkydrops
+authors: [BadBones69, DepressedChan]
 main: me.badbones69.crazyenvoy.Main
 version: ${project.version}${build.number}
 api-version: 1.13
-description: A crazy crazyenvoy plugin.
-softdepend: [HolographicDisplays, Holograms, PlaceholderAPI, MVdWPlaceholderAPI, Multiverse-Core, MultiWorld, WorldEdit, WorldGuard]
+description: A skydrop plugin.
+softdepend: [HolographicDisplays, Holograms, PlaceholderAPI, Multiverse-Core, MultiWorld, WorldEdit, WorldGuard]
 commands:
-  envoy:
+  skydrop:
     description: Shows the next time till the next crazyenvoy.

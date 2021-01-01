@@ -17,12 +17,28 @@ public class HolographicSupport implements HologramController {
     private HashMap<Block, Hologram> holograms = new HashMap<>();
     
     public void createHologram(Block block, Tier tier) {
-        double hight = tier.getHoloHight();
-        Hologram hologram = HologramsAPI.createHologram(envoy.getPlugin(), block.getLocation().add(.5, hight, .5));
+        double height = tier.getHoloHight();
+        Hologram hologram = HologramsAPI.createHologram(envoy.getPlugin(), block.getLocation().add(.5, height, .5));
         for (String line : tier.getHoloMessage()) {
-            hologram.appendTextLine(Methods.color(line));
+            hologram.appendTextLine(Methods.color(line.replace("<amount>", String.valueOf(envoy.getMaxSpawns()))));
         }
         holograms.put(block, hologram);
+    }
+
+    public void updateHolograms() {
+        HashMap<Block, Hologram> clone = new HashMap<>();
+        for (Block block : holograms.keySet())
+        {
+            Tier tier = envoy.getTier(block);
+            double height = tier.getHoloHight();
+            Hologram hologram = HologramsAPI.createHologram(envoy.getPlugin(), block.getLocation().add(.5, height, .5));
+            for (String line : tier.getHoloMessage()) {
+                hologram.appendTextLine(Methods.color(line.replace("<amount>", String.valueOf(envoy.getActiveEnvoys().size() - 1))));
+            }
+            clone.put(block, hologram);
+        }
+        removeAllHolograms();
+        holograms = clone;
     }
     
     public void removeHologram(Block block) {
